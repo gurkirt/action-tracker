@@ -38,6 +38,7 @@ from detectron2.utils.logger import setup_logger
 sys.path.insert(0, 'third_party/CenterNet2/')
 from centernet.config import add_centernet_config
 
+from gtr.data.datasets import *
 from gtr.config import add_gtr_config
 from gtr.data.custom_build_augmentation import build_custom_augmentation
 from gtr.data.custom_dataset_dataloader import  build_custom_train_loader
@@ -63,7 +64,14 @@ def get_total_grad_norm(parameters, norm_type=2):
     return total_norm
 
 
-def do_test(cfg, model):
+def do_test(cfg, model, eval_only=False):
+    if eval_only:
+        anno_dir = '/cluster/work/cvl/gusingh/data/tracking/datasets/'
+        data_dir = cfg.INPUT_DIR
+        mot.mot_reg(data_dir, anno_dir)
+        crowdhuman.crowdhuman_reg(data_dir, anno_dir)
+        ucf24.mot_ucf24(data_dir, anno_dir)
+        
     results = OrderedDict()
     for dataset_name in cfg.DATASETS.TEST:
         output_folder = os.path.join(
@@ -113,6 +121,13 @@ def do_test(cfg, model):
     return results
 
 def do_train(cfg, model, resume=False):
+
+    anno_dir = '/cluster/work/cvl/gusingh/data/tracking/datasets/'
+    data_dir = cfg.INPUT_DIR
+    mot.mot_reg(data_dir, anno_dir)
+    crowdhuman.crowdhuman_reg(data_dir, anno_dir)
+    ucf24.mot_ucf24(data_dir, anno_dir)
+    
     model = check_if_freeze_model(model, cfg)
     model.train()
     if cfg.SOLVER.USE_CUSTOM_SOLVER:
@@ -161,6 +176,7 @@ def do_train(cfg, model, resume=False):
         data_loader = build_custom_train_loader(cfg, mapper=mapper)
 
     logger.info("Starting training from iteration {}".format(start_iter))
+    
     with EventStorage(start_iter) as storage:
         step_timer = Timer()
         data_timer = Timer()
@@ -244,7 +260,7 @@ def main(args):
         DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
             cfg.MODEL.WEIGHTS, resume=args.resume
         )
-        return do_test(cfg, model)
+        return do_test(cfg, model, args.eval_only)
 
     distributed = comm.get_world_size() > 1
     if distributed:

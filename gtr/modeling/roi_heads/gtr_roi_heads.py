@@ -362,16 +362,16 @@ class GTRROIHeads(CascadeROIHeads):
         self.not_clamp_box = cfg.INPUT.NOT_CLAMP_BOX
         self.delay_cls = cfg.MODEL.ROI_BOX_HEAD.DELAY_CLS
         ret = super()._init_box_head(cfg, input_shape)
-        del ret['box_predictors']
-        cascade_bbox_reg_weights = cfg.MODEL.ROI_BOX_CASCADE_HEAD.BBOX_REG_WEIGHTS
-        box_predictors = []
-        for box_head, bbox_reg_weights in zip(ret['box_heads'], cascade_bbox_reg_weights):
-            box_predictors.append(
-                CustomFastRCNNOutputLayers(
-                    cfg, box_head.output_shape,
-                    box2box_transform=Box2BoxTransform(weights=bbox_reg_weights)
-                ))
-        ret['box_predictors'] = box_predictors
+        # del ret['box_predictors']
+        # cascade_bbox_reg_weights = cfg.MODEL.ROI_BOX_CASCADE_HEAD.BBOX_REG_WEIGHTS
+        # box_predictors = []
+        # for box_head, bbox_reg_weights in zip(ret['box_heads'], cascade_bbox_reg_weights):
+        #     box_predictors.append(
+        #         CustomFastRCNNOutputLayers(
+        #             cfg, box_head.output_shape,
+        #             box2box_transform=Box2BoxTransform(weights=bbox_reg_weights)
+        #         ))
+        # ret['box_predictors'] = box_predictors
         return ret
 
 

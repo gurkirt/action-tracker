@@ -26,11 +26,13 @@ def register_tao_instances(name, metadata, json_file, image_root):
         metadata (dict): extra metadata associated with this dataset. It can be an empty dict.
         json_file (str): path to the json instance annotation file.
         image_root (str): directory which contains all the images.
+    
     """
     DatasetCatalog.register(name, lambda: load_tao_json(json_file, image_root, name))
     MetadataCatalog.get(name).set(
         json_file=json_file, image_root=image_root, evaluator_type="tao", **metadata
     )
+
 
 def register_tao_v1_instances(name, metadata, json_file, image_root):
     """
@@ -46,6 +48,7 @@ def register_tao_v1_instances(name, metadata, json_file, image_root):
     MetadataCatalog.get(name).set(
         json_file=json_file, image_root=image_root, evaluator_type="lvis", **metadata
     )
+
 
 def load_tao_json(json_file, image_root, dataset_name=None):
     from lvis import LVIS

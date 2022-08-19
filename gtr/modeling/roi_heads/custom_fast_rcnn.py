@@ -33,6 +33,7 @@ class CustomFastRCNNOutputLayers(FastRCNNOutputLayers):
             nn.init.constant_(self.cls_score.bias, bias_value)
 
         self.use_fed_loss = cfg.MODEL.ROI_BOX_HEAD.USE_FED_LOSS
+
         if self.use_fed_loss:
             self.fed_loss_num_cat = cfg.MODEL.ROI_BOX_HEAD.FED_LOSS_NUM_CAT
             self.register_buffer(
@@ -43,6 +44,7 @@ class CustomFastRCNNOutputLayers(FastRCNNOutputLayers):
                 )
             )
     
+
     def losses(self, predictions, proposals):
         """
         enable advanced loss
@@ -67,6 +69,7 @@ class CustomFastRCNNOutputLayers(FastRCNNOutputLayers):
             loss_cls = self.sigmoid_cross_entropy_loss(scores, gt_classes)
         else:
             loss_cls = self.softmax_cross_entropy_loss(scores, gt_classes)
+        
         return {
             "loss_cls": loss_cls, 
             "loss_box_reg": self.box_reg_loss(
@@ -101,6 +104,7 @@ class CustomFastRCNNOutputLayers(FastRCNNOutputLayers):
         cls_loss = F.binary_cross_entropy_with_logits(
             pred_class_logits[:, :-1], target, reduction='none') # B x C
         loss =  torch.sum(cls_loss * weight) / B  
+        
         return loss
 
 
@@ -144,6 +148,7 @@ class CustomFastRCNNOutputLayers(FastRCNNOutputLayers):
             self.not_clamp_box,
         )
 
+
 def custom_fast_rcnn_inference(
     boxes: List[torch.Tensor],
     scores: List[torch.Tensor],
@@ -156,7 +161,9 @@ def custom_fast_rcnn_inference(
     not_clamp_box: bool,
 ):
     """
+
     allow not clamp box
+    
     """
     result_per_image = [
         fast_rcnn_inference_single_image(

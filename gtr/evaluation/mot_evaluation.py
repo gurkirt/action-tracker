@@ -22,7 +22,7 @@ def eval_track(out_dir, year):
     default_metrics_config = {'METRICS': ['HOTA', 'CLEAR', 'Identity']}
     config = {
         **default_eval_config, **default_dataset_config, **default_metrics_config}  # Merge default configs
-    config['GT_FOLDER'] = 'datasets/mot/MOT{}/'.format(year)
+    config['GT_FOLDER'] = '/cluster/work/cvl/gusingh/data/tracking/datasets/MOT{}/'.format(year)
     config['SPLIT_TO_EVAL'] = 'half_val'
     config['TRACKERS_FOLDER'] = out_dir
     eval_config = {k: v for k, v in config.items() if k in default_eval_config.keys()}
@@ -85,8 +85,8 @@ def track_and_eval_mot(out_dir, data, preds, dataset_name):
             per_image_preds[x['image_id']].append(x)
     has_track_id = len(preds) > 0 and 'track_id' in preds[0]
     del preds
-    year = '20' if '20' in dataset_name else '17'
-    split = 'trainval' if year == '17' else 'train'
+    year = '17' #'20' if '20' in dataset_name else '17'
+    split = 'val' # if year == '17' else 'train'
     mot_out_dir = out_dir + '/moteval/{}/pred/data/'.format(split)
     if not has_track_id:
         print('Runing naive tracker')

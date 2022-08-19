@@ -8,7 +8,8 @@ MODEL:
     NAME: GTRROIHeads
     PROPOSAL_APPEND_GT: False
     NO_BOX_HEAD: True
-  WEIGHTS: 'models/CH_FPN_1x.pth'
+  # WEIGHTS: '/cluster/work/cvl/gusingh/data/tracking/models/CH_FPN_1x.pth'
+  WEIGHTS: '/cluster/work/cvl/gusingh/data/tracking/experiments/detector_train/model_0044999.pth'
   ASSO_ON: True
   ASSO_HEAD:
     NEG_UNMATCHED: True
@@ -38,7 +39,7 @@ INPUT:
   TEST_INPUT_TYPE: square
   TEST_SIZE: 1560
   VIDEO:
-    TRAIN_LEN: 8
+    TRAIN_LEN: 6
     TEST_LEN: 32
 VIDEO_INPUT: True
 VIDEO_TEST:

@@ -1,6 +1,9 @@
 from detectron2.data.datasets.register_coco import register_coco_instances
 import os
 
+import logging
+logger = logging.getLogger(__name__)
+
 categories = [
     {'id': 1, 'name': 'person'},
 ]
@@ -18,10 +21,12 @@ _PREDEFINED_SPLITS_CROWDHUMAN = {
     "crowdhuman_val": ("crowdhuman/CrowdHuman_val/Images/", "crowdhuman/annotations/val_amodal.json"),
 }
 
-for key, (image_root, json_file) in _PREDEFINED_SPLITS_CROWDHUMAN.items():
-    register_coco_instances(
-        key,
-        _get_builtin_metadata(),
-        os.path.join("datasets", json_file) if "://" not in json_file else json_file,
-        os.path.join("datasets", image_root),
-    )
+def crowdhuman_reg(data_dir, anno_dir):
+    logger.info(f'Data root is {data_dir:s} anno root {anno_dir:s}')
+    for key, (image_root, json_file) in _PREDEFINED_SPLITS_CROWDHUMAN.items():
+        register_coco_instances(
+            key,
+            _get_builtin_metadata(),
+            os.path.join(anno_dir, json_file) if "://" not in json_file else json_file,
+            os.path.join(data_dir, "datasets", image_root),
+        )

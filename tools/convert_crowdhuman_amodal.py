@@ -4,10 +4,10 @@ import numpy as np
 import json
 import cv2
 
-DATA_PATH = 'datasets/crowdhuman/'
+DATA_PATH = '/cluster/work/cvl/gusingh/data/tracking/datasets/crowdhuman/'
 OUT_PATH = DATA_PATH + 'annotations/'
 SPLITS = ['val', 'train']
-IMAGE_DIR = 'datasets/crowdhuman/CrowdHuman_{}/Images/'
+IMAGE_DIR = '/cluster/work/cvl/gusingh/data/tracking/datasets/crowdhuman/CrowdHuman_{}/Images/'
 
 def load_func(fpath):
     print('fpath', fpath)

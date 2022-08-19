@@ -79,6 +79,7 @@ class TrackingVisualizer(VideoVisualizer):
         # print('self._assigned_colors', self._assigned_colors)
         return colors
 
+
 class GTRPredictor(DefaultPredictor):
     @torch.no_grad()
     def __call__(self, original_frames):
